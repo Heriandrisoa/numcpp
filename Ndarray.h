@@ -1,49 +1,49 @@
-#ifndef NDARRAY_H
-#define NDARRAY_H
-
+#include <iostream>
 #include <vector>
-#include <cstddef>
-#include <stdexcept>
-#include <initializer_list>
+#include <numeric>
+#include <algorithm>
 
+using namespace std;
+
+template <typename T>
 class Ndarray {
-public:
-    Ndarray(const std::vector<int>&dshape, double fill_value = 0);
-    Ndarray(const std::vector<double>& data, const std::vector<int>& shape);
-    Ndarray(const std::initializer_list<double> list_data , const std::vector<int>& shape);
-    ~Ndarray(); 
-
-    static Ndarray zeros(const std::vector<int>& shape);
-    static Ndarray ones(const std::vector<int>& shape);
-    static Ndarray arange(double start, double stop, double step);
-
-    double& at(const std::vector<int>& indices);        //raha modifiena
-    double at(const std::vector<int>& indices) const;   //raha récupérena
-
-    Ndarray operator+(const Ndarray& other) const;
-    Ndarray operator-(const Ndarray& other) const;
-    Ndarray operator*(const Ndarray& other) const;
-    Ndarray operator+(double scalar) const;
-
-    Ndarray reshape(const std::vector<int>& new_shape) const;
-    Ndarray transpose() const;
-    double sum() const;
-    double max() const;
-    double min() const;
-
-    // Getters
-    std::vector<int> get_shape() const { return m_shape; }
-    int size() const { return m_size; }
-
 private:
-    std::vector<double> m_data;      // Données stockées
-    std::vector<int> m_shape;     // dimension du tableau
-    int m_size;                   // Nombre total d'éléments
-    std::vector<int> m_strides;   // map de dimension
+    vector<T> m_data;
+    vector<int> m_shape;
+    vector<int> m_strides;
+    int m_size;
 
-    //utilitaires
-    int compute_offset(const std::vector<int>& indices) const;
-    void check_m_shapecompatibility(const Ndarray& other) const;
+    int compute_offset(const vector<int>& indices) const;
+    void check_shape_compatibility(const Ndarray& other) const;
+
+public:
+    Ndarray(const vector<int>& shape, T fill_value);
+    Ndarray(const vector<T>& data, const vector<int>& shape);
+    Ndarray(initializer_list<T> data, const vector<int>& shape);
+
+    ~Ndarray() = default;
+
+    // Générateurs
+    static Ndarray<T> zeros(const vector<int>& shape);
+    static Ndarray<T> ones(const vector<int>& shape);
+    static Ndarray<T> arange(T start, T stop, T step);
+
+    // Opérations
+    Ndarray<T> operator+(const Ndarray& other) const;
+    Ndarray<T> operator-(const Ndarray& other) const;
+    Ndarray<T> operator*(const Ndarray& other) const; // À implémenter
+    Ndarray<T> operator+(T scalar) const;
+
+    // Accès
+    T& at(const vector<int>& indices);
+    T at(const vector<int>& indices) const;
+
+    // Manipulation
+    Ndarray<T> reshape(const vector<int>& new_shape) const;
+    Ndarray<T> transpose() const;
+
+    // Math
+    T sum() const;
+    T max() const;
+    T min() const;
 };
-
-#endif 
