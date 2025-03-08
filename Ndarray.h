@@ -20,6 +20,8 @@ public:
     Ndarray(const vector<int>& shape, T fill_value);
     Ndarray(const vector<T>& data, const vector<int>& shape);
     Ndarray(initializer_list<T> data, const vector<int>& shape);
+    template<typename... t> 
+    Ndarray(t... type);
 
     ~Ndarray() = default;
 
@@ -38,6 +40,8 @@ public:
     T& at(const vector<int>& indices);
     T at(const vector<int>& indices) const;
 
+
+    vector<int> shape() const { return m_shape;}
     // Manipulation
     Ndarray<T> reshape(const vector<int>& new_shape) const;
     Ndarray<T> transpose() const;

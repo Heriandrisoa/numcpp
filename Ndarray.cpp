@@ -1,6 +1,8 @@
 #include "Ndarray.h"
 #include <vector>
-
+#include <stdexcept>
+#include <numeric>
+#include <algorithm>
 
 template <typename T>
 Ndarray<T>::Ndarray(const vector<int>& shape, T fill_value) 
@@ -41,6 +43,33 @@ Ndarray<T>::Ndarray(initializer_list<T> data, const vector<int>& shape)
     for (int i = m_shape.size() - 1; i >= 0; --i) {
         m_strides[i] = stride;
         stride *= m_shape[i];
+    }
+}
+
+template <typename T>
+template<typename... t> 
+Ndarray<T>::Ndarray(t... tp) : m_size(1) {
+    // Create a list of vectors from the variadic arguments
+    initializer_list<vector<T>> type = {tp...};
+    
+    int norm_size = type.begin()->size();  // Get the size of the first vector
+    for (const auto& i : type) {
+        if (i.size() != norm_size) {
+            throw invalid_argument("All rows must be of the same length");
+        }
+        m_data.insert(m_data.end(), i.begin(), i.end()); // Merge all vectors into m_data
+    }
+
+    m_shape = { static_cast<int>(type.size()), norm_size };
+
+    for (int dim : m_shape)
+        m_size *= dim;
+
+    m_strides.resize(m_shape.size());
+    int strides = 1;
+    for (int i = m_shape.size() - 1; i > 0; i--) {
+        m_strides[i] = strides;
+        strides *= m_shape[i];
     }
 }
 
@@ -166,3 +195,4 @@ void Ndarray<T>::check_shape_compatibility(const Ndarray& other) const {
     if (m_shape != other.m_shape)
         throw invalid_argument("Shapes are not compatible");
 }
+
