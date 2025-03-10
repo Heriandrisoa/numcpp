@@ -5,7 +5,7 @@
 
 using namespace std;
 
-template <typename T>
+template <typename T, int... dim>
 class Ndarray {
 private:
     vector<T> m_data;
@@ -17,24 +17,23 @@ private:
     void check_shape_compatibility(const Ndarray& other) const;
 
 public:
-    Ndarray(const vector<int>& shape, T fill_value);
+    Ndarray(T fill_value);
     Ndarray(const vector<T>& data, const vector<int>& shape);
     Ndarray(initializer_list<T> data, const vector<int>& shape);
-    template<typename... t> 
-    Ndarray(t... type);
+    Ndarray(initializer_list<initializer_list<T>> data);
 
     ~Ndarray() = default;
 
     // Générateurs
-    static Ndarray<T> zeros(const vector<int>& shape);
-    static Ndarray<T> ones(const vector<int>& shape);
-    static Ndarray<T> arange(T start, T stop, T step);
+    static Ndarray<T,dim...> zeros();
+    static Ndarray<T,dim...> ones();
+    static Ndarray<T,dim...> arange(T start, T stop, T step);
 
     // Opérations
-    Ndarray<T> operator+(const Ndarray& other) const;
-    Ndarray<T> operator-(const Ndarray& other) const;
-    Ndarray<T> operator*(const Ndarray& other) const; // À implémenter
-    Ndarray<T> operator+(T scalar) const;
+    Ndarray<T,dim...> operator+(const Ndarray& other) const;
+    Ndarray<T,dim...> operator-(const Ndarray& other) const;
+    Ndarray<T,dim...> operator*(const Ndarray& other) const; // À implémenter
+    Ndarray<T,dim...> operator+(T scalar) const;
 
     // Accès
     T& at(const vector<int>& indices);
@@ -43,8 +42,8 @@ public:
 
     vector<int> shape() const { return m_shape;}
     // Manipulation
-    Ndarray<T> reshape(const vector<int>& new_shape) const;
-    Ndarray<T> transpose() const;
+    Ndarray<T,dim...> reshape(const vector<int>& new_shape) const;
+    Ndarray<T,dim...> transpose() const;
 
     // Math
     T sum() const;

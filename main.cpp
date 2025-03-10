@@ -5,9 +5,8 @@ using namespace std;
 
 int main() {
     try {
-        Ndarray<vector<int>> tableau({1,2,3},{1,4,5});
-
-//        cout << tableau.shape()[0] <<"   "<<tableau.shape()[1] <<endl;
+        // Construction correcte d'un Ndarray 2D
+        Ndarray<int, 2> a = Ndarray<int,2>::zeros();
     } catch (const exception& e) {
         cerr << "Erreur : " << e.what() << endl;
         return 1;
