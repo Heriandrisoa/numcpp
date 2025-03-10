@@ -1,11 +1,8 @@
 #include "Ndarray.h"
-#include <vector>
-#include <stdexcept>
-#include <numeric>
-#include <algorithm>
+
 
 template <typename T,int... dim>
-Ndarray<T,dim...>::Ndarray( T fill_value) 
+Ndarray<T,dim...>::Ndarray(T fill_value) 
     : m_size(1) {
     m_shape = {dim...};
     for (int i : m_shape) m_size *= i;
@@ -48,8 +45,6 @@ Ndarray<T,dim...>::Ndarray(initializer_list<T> data, const vector<int>& shape)
     }
 }
 
-
-
 template <typename T,int... dim>
 Ndarray<T,dim...>::Ndarray(initializer_list<initializer_list<T>> data) {
 
@@ -73,10 +68,12 @@ Ndarray<T,dim...>::Ndarray(initializer_list<initializer_list<T>> data) {
 }
 
 // Générateurs
-template <typename T,int... dim>
-Ndarray<T,dim...> Ndarray<T,dim...>::zeros() {
-    return Ndarray<T,dim...>(0);
+
+template <typename T, int... dim>
+Ndarray<T, dim...> Ndarray<T, dim...>::zeros() {
+    return Ndarray<T, dim...>(0);
 }
+
 
 template <typename T,int... dim>
 Ndarray<T,dim...> Ndarray<T,dim...>::ones() {
